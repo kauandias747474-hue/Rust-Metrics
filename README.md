@@ -1,75 +1,77 @@
-#  Rust Metrics
+# 🚀 Rust-Metrics: The Deterministic Telemetry Engine
 
 ![Rust](https://img.shields.io/badge/rust-%23E32A1C.svg?style=for-the-badge&logo=rust&logoColor=white)
-![Tokio](https://img.shields.io/badge/runtime-tokio-%2314d1ce?style=for-the-badge)
-![License](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)
+![gRPC](https://img.shields.io/badge/gRPC-4285F4?style=for-the-badge&logo=google-cloud&logoColor=white)
+![Zero-Copy](https://img.shields.io/badge/Zero--Copy-rkyv-orange?style=for-the-badge)
 ![Status](https://img.shields.io/badge/status-active-brightgreen?style=for-the-badge)
 
-🎭 **A Visão / The Vision**
+---
 
-**(PT-BR) O Fim do Gargalo de Telemetria**
-Sistemas baseados em GC (Go/Java) sofrem pausas que geram perda de dados em alta escala. O **Rust-Metrics** elimina esse gargalo com processamento **determinístico**.
-- **Latência Zero:** Sem Garbage Collector, o tempo de resposta é constante.
-- **Eficiência Máxima:** Processa milhões de eventos em um único nó, economizando infraestrutura.
+## 🇧🇷 Português
 
-**(EN-US) The End of the Telemetry Bottleneck**
-GC-based systems (Go/Java) suffer from pauses that cause data loss at scale. **Rust-Metrics** solves this with **deterministic** processing.
-- **Zero Latency:** No Garbage Collector means constant response times.
-- **Max Efficiency:** Processes millions of events on a single node, saving infra costs.
+### 🎯 Por que Rust-Metrics?
+O nome **Rust-Metrics** nasceu da necessidade de eliminar a incerteza. Em sistemas de telemetria de alta escala, o maior inimigo é o **Garbage Collector (GC)**. Linguagens como Go e Java sofrem pausas imprevisíveis que resultam em perda de pacotes e latência instável. 
+
+O **Rust-Metrics** utiliza Rust para garantir processamento **determinístico**: sem pausas, sem perda de dados, apenas performance bruta em nível de hardware.
+
+### 🏗️ Arquitetura Poliglota (Novas Integrações)
+Para tornar o projeto uma solução completa, integramos o motor Rust com as melhores ferramentas de cada domínio:
+
+1.  **Go (Control Plane):** Adicionado em `sdk-go/` para atuar como orquestrador. O Go é o padrão ouro para infraestrutura cloud e Kubernetes. Ele gerencia o ciclo de vida do motor Rust.
+2.  **Python (Analysis Plane):** Adicionado em `sdk-python/`. Enquanto o Rust processa, o Python utiliza bibliotecas como **Polars** e **Pandas** para análise estatística e detecção de anomalias em tempo real.
+3.  **TypeScript (Visual Plane):** Adicionado em `dashboard-ts/`. Um frontend moderno que consome dados via **gRPC-Web**, garantindo que os gráficos reflitam o que está acontecendo no motor com o mínimo de atraso visual.
 
 ---
 
-🏗️ **Arquitetura / Architecture**
+## 🇺🇸 English
 
+### 🎯 Why Rust-Metrics?
+**Rust-Metrics** was engineered to kill uncertainty. In high-throughput telemetry, the **Garbage Collector (GC)** is the enemy. Languages like Go and Java have unpredictable pauses that cause packet loss and jitter.
 
+**Rust-Metrics** leverages Rust to provide **deterministic** processing: no pauses, no data loss, just raw hardware-level performance.
 
-**1. Lock-Free Ingestion**
-- **PT:** Ring Buffers atômicos (Crossbeam) garantem que a rede nunca bloqueie o motor.
-- **EN:** Atomic Ring Buffers (Crossbeam) ensure network threads never block the engine.
+### 🏗️ Polyglot Architecture (New Tooling)
+To turn this engine into a full-scale ecosystem, we've integrated Rust with the best-in-class tools for every domain:
 
-**2. SIMD Engine**
-- **PT:** Agregação via hardware (instruções vetoriais) para cálculos matemáticos massivos.
-- **EN:** Hardware-level aggregation (vector instructions) for massive math calculations.
-
-**3. Zero-Copy Pipeline**
-- **PT:** Desserialização direta no buffer de rede (rkyv), evitando alocações na Heap.
-- **EN:** Direct deserialization in network buffers (rkyv), avoiding Heap allocations.
+1.  **Go (Control Plane):** Located in `sdk-go/`. Go is the industry standard for cloud infrastructure. It acts as the orchestrator, managing node health and configuration.
+2.  **Python (Analysis Plane):** Located in `sdk-python/`. While Rust handles the ingestion, Python uses **Polars** and **ML libraries** to perform real-time statistical analysis and anomaly detection.
+3.  **TypeScript (Visual Plane):** Located in `dashboard-ts/`. A modern UI that consumes data via **gRPC-Web**, ensuring dashboards stay synced with the engine with microsecond-level precision.
 
 ---
 
-🛠️ **Arsenal de Ferramentas / The Full Toolchain**
+## 🛠️ Arsenal de Ferramentas / Toolchain
 
-| Camada / Layer | Ferramenta / Tool | Propósito (PT/EN) |
+| Camada / Layer | Ferramenta / Tool | Propósito / Purpose |
 | :--- | :--- | :--- |
-| **Runtime** | `Tokio` | I/O Assíncrono massivo / Massive Async I/O. |
-| **Parallelism** | `Rayon` | Processamento multithread de dados / Data parallelism. |
-| **Serialization** | `Prost / Tonic` | Contratos gRPC rápidos e tipados / Fast typed gRPC. |
-| **Performance** | `Criterion.rs` | Benchmarking estatístico rigoroso / Rigorous benchmarking. |
-| **Observability** | `Tracing / Opentelemetry` | Rastreamento de latência e logs / Trace and log analysis. |
-| **Memory** | `Jemalloc / Mi-malloc` | Alocador de memória otimizado / Optimized memory allocator. |
-| **Profiling** | `Flamegraph` | Identificação de hot-spots de CPU / CPU hot-spot analysis. |
-| **Validation** | `PropTest` | Testes baseados em propriedades / Property-based testing. |
+| **Engine Core** | `Rust` | Processamento determinístico de baixa latência. |
+| **Runtime** | `Tokio` | I/O assíncrono para lidar com milhões de conexões. |
+| **Serialization** | `gRPC / Protobuf` | Contrato universal entre Rust, Go, Python e TS. |
+| **Zero-Copy** | `rkyv` | Desserialização sem alocação na Heap (Velocidade máxima). |
+| **Orchestration** | `Go` | Gerenciamento de containers e API de controle. |
+| **Analytics** | `Python / Polars` | Processamento de dados e inteligência artificial. |
+| **Frontend** | `TS / React` | Interface visual de alta fidelidade e tempo real. |
 
+----
+
+**🚀 Como Iniciar / Quick Start**
+Contratos: make gen-proto (Gera o código para todas as linguagens).
+
+Motor: cargo run --release (Inicia o servidor gRPC em Rust).
+
+Análise: python sdk-python/client.py (Inicia o consumo de dados).
 ---
 
-⚡ **Diferenciais / Key Features**
+**📜 Licença / License:** 
+*MIT License. Free for all.*
 
-- **Deterministic:** Sem pausas de GC; latência estável em nível de microssegundos.
-- **SIMD Optimized:** Redução de consumo de CPU via vetores de processamento de hardware.
-- **Lock-Free:** Eliminação de contenção de threads ao evitar `Mutex` em caminhos críticos.
-- **CI/CD Ready:** Workflow automatizado para checagem de performance (Benchmark Regression).
 
----
+## 📂 Estrutura de Pastas / Project Structure
 
-👨‍💻 **Por que Rust? / Why Rust?**
-
-**(PT-BR)** Prova de conceito sobre sistemas de missão crítica: unindo a velocidade bruta do C com a segurança absoluta de memória do Rust.
-**(EN-US)** Proof of concept for mission-critical systems: merging C's raw speed with Rust's absolute memory safety.
-
----
-
-🤝 **Contribuição / Contributing**
-1. **Fork** -> 2. **Branch** -> 3. **Commit** -> 4. **PR**.
-
-📜 **Licença / License**
-MIT License. Free for all.
+```text
+├── src/                # Motor Principal em Rust
+├── proto/              # Contratos gRPC (Fonte da Verdade)
+├── sdk-go/             # Orquestrador e Ferramentas Cloud (Go)
+├── sdk-python/         # Análise de Dados e ML (Python)
+├── dashboard-ts/       # Interface Web (TypeScript/React)
+├── benches/            # Relatórios de Performance (Criterion)
+└── .github/workflows/  # CI/CD de Performance e Automação
