@@ -1,4 +1,6 @@
 # Technical Documentation/Documentação Técnica
+
+
 ---
 
 ## 🇧🇷 Versão em Português
