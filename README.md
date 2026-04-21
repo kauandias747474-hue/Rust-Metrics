@@ -13,10 +13,10 @@
 
 ## 🇧🇷 Português
 
-### 🎯 Por que Rust-Metrics?
+###  Por que Rust-Metrics?
 O **Rust-Metrics** nasceu para eliminar a incerteza. Em telemetria de alta escala, o "Garbage Collector" (GC) de linguagens como Go e Java causa pausas que resultam em perda de dados. Nosso motor utiliza Rust e C++ para garantir um processamento **determinístico** e latência estável em nível de microssegundos.
 
-### 🏗️ Arquitetura Híbrida e Poliglota
+###  Arquitetura Híbrida e Poliglota
 Elevamos o projeto para um nível industrial, integrando cinco linguagens onde cada uma desempenha seu papel fundamental:
 
 1.  **C++ (Native Core):** Localizado em `native-core/`. Responsável por cálculos matemáticos intensivos e otimizações de hardware (SIMD). Representa a integração com sistemas legados e performance bruta via FFI.
@@ -29,10 +29,10 @@ Elevamos o projeto para um nível industrial, integrando cinco linguagens onde c
 
 ## 🇺🇸 English
 
-### 🎯 Why Rust-Metrics?
+###  Why Rust-Metrics?
 **Rust-Metrics** was engineered to kill uncertainty. In high-throughput telemetry, Garbage Collection (GC) pauses are the enemy. By leveraging Rust and C++, we provide **deterministic** processing: no jitter, no data loss, just raw hardware-level performance.
 
-### 🏗️ Hybrid & Polyglot Architecture
+###  Hybrid & Polyglot Architecture
 We've scaled this project to an industrial level, integrating five languages where each plays a strategic role:
 
 1.  **C++ (Native Core):** Located in `native-core/`. Handles heavy math and hardware-level optimizations (SIMD). It showcases FFI integration and raw legacy-speed capabilities.
@@ -43,7 +43,7 @@ We've scaled this project to an industrial level, integrating five languages whe
 
 ---
 
-## 🛠️ Arsenal de Ferramentas / Toolchain
+##  Arsenal de Ferramentas / Toolchain
 
 | Camada / Layer | Ferramenta / Tool | Propósito / Purpose |
 | :--- | :--- | :--- |
@@ -56,7 +56,7 @@ We've scaled this project to an industrial level, integrating five languages whe
 | **Frontend** | `TS / React` | Interface visual de baixa latência. |
 
 ---
-**🚀 Como Iniciar / Quick Start**
+** Como Iniciar / Quick Start**
 Compilar Nativo:
 *O Rust compilará o C++ automaticamente via build.rs.*
 
@@ -69,13 +69,13 @@ Executar Motor:
 Analisar: 
 *python sdk-python/client.py*
 
-**📜 Licença / License:** 
+** Licença / License:** 
 *MIT License. Free for all.*
 
 ---
 
 
-## 📂 Estrutura de Pastas / Project Structure
+##  Estrutura de Pastas / Project Structure
 
 ```text
 ├── src/                # Rust Engine (Safe Core)
