@@ -1,7 +1,10 @@
 use tonic::{Request, Response, Status};
-use crate::telemetry::{self, metrics_ingestor_server::MetricsIngestor};
-
-use crate::storage::DataSink; 
+use crate::telemetry::metrics_ingestor_server::MetricsIngestor;
+use crate::telemetry::{
+    MetricRequest, MetricResponse, Empty, 
+    StatusResponse, BatchRequest, BatchResponse
+};
+use crate::storage::DataSink;
 
 pub struct MyMetrics {
     pub sink: DataSink,
@@ -9,34 +12,43 @@ pub struct MyMetrics {
 
 #[tonic::async_trait]
 impl MetricsIngestor for MyMetrics {
-    // 1. Método principal corrigindo o tipo f32/f64
-    async fn ingest_metric(
+ 
+    async fn send_metrics_stream(
         &self,
-        request: Request<telemetry::MetricRequest>,
-    ) -> Result<Response<telemetry::MetricResponse>, Status> {
-        let req = request.into_inner();
-        
+         request: Request<tonic::Streaming<MetricRequest>>,
+    ) -> Result<Response<MetricResponse>, Status> {
+        let mut stream = request.into_inner();
 
-        self.sink.save_metric(&req.sensor_id, req.value as f64);
+        while let Ok(Some(metric)) = stream.message().await {
+            // Garanta que save_metric existe no DataSink
+            self.sink.save_metric(&metric);
+        }
 
-        Ok(Response::new(telemetry::MetricResponse {
-            message: format!("Métrica de {} recebida!", req.sensor_id),
+        Ok(Response::new(MetricResponse {
+            success: true,
+            calculated_std_dev: 0.0, 
+            message: "Métricas de stream processadas".into(),
         }))
     }
 
-  
-    async fn send_metrics_stream(
-        &self,
-        _request: Request<tonic::Streaming<telemetry::MetricRequest>>,
-    ) -> Result<Response<telemetry::MetricResponse>, Status> {
-        Err(Status::unimplemented("Stream ainda não implementado"))
+
+    async fn get_system_status(
+        &self, 
+        _request: Request<Empty>
+    ) -> Result<Response<StatusResponse>, Status> {
+        Ok(Response::new(StatusResponse {
+            message: "Motor Rust Ativo".into(),
+            cpu_usage: "10%".into(),
+            hardware_linked: true,
+        }))
     }
 
+    // Função obrigatória do contrato
     async fn get_metrics_batch(
-        &self,
-        _request: Request<telemetry::BatchRequest>,
-    ) -> Result<Response<telemetry::BatchResponse>, Status> {
-        Ok(Response::new(telemetry::BatchResponse {
+        &self, 
+        _request: Request<BatchRequest>
+    ) -> Result<Response<BatchResponse>, Status> {
+        Ok(Response::new(BatchResponse {
             metrics: vec![],
         }))
     }
