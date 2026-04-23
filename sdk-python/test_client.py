@@ -20,7 +20,6 @@ def run():
                     timestamp=int(time.time())
                 )
 
-        # Envia o stream para o Rust/C++
         response = stub.SendMetricsStream(generate_metrics())
         
         print(f" Resposta do Servidor: {response.message}")
