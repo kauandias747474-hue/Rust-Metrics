@@ -1,19 +1,28 @@
-package gen
+package telemetry
 
 import (
 	"context"
+
 	"google.golang.org/grpc"
 )
 
-// --- DEFINIÇÕES DAS MENSAGENS (O que estaria no .pb.go) ---
+// --- DEFINIÇÕES DAS MENSAGENS ---
 
 type Empty struct{}
 
+func (m *Empty) Reset()         { *m = Empty{} }
+func (m *Empty) String() string { return "empty" }
+func (*Empty) ProtoMessage()    {}
+
 type MetricRequest struct {
-	SensorId  string `protobuf:"bytes,1,opt,name=sensor_id,json=sensorId,proto3" json:"sensor_id, some"`
+	SensorId  string  `protobuf:"bytes,1,opt,name=sensor_id,json=sensorId,proto3" json:"sensor_id,omitempty"`
 	Value     float32 `protobuf:"fixed32,2,opt,name=value,proto3" json:"value,omitempty"`
 	Timestamp int64   `protobuf:"varint,3,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
 }
+
+func (m *MetricRequest) Reset()         { *m = MetricRequest{} }
+func (m *MetricRequest) String() string { return "metric_request" }
+func (*MetricRequest) ProtoMessage()    {}
 
 type MetricResponse struct {
 	Success           bool    `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
@@ -21,13 +30,37 @@ type MetricResponse struct {
 	Message           string  `protobuf:"bytes,3,opt,name=message,proto3" json:"message,omitempty"`
 }
 
+func (m *MetricResponse) Reset()         { *m = MetricResponse{} }
+func (m *MetricResponse) String() string { return "metric_response" }
+func (*MetricResponse) ProtoMessage()    {}
+
 type StatusResponse struct {
 	Message        string `protobuf:"bytes,1,opt,name=message,proto3" json:"message,omitempty"`
 	CpuUsage       string `protobuf:"bytes,2,opt,name=cpu_usage,json=cpuUsage,proto3" json:"cpu_usage,omitempty"`
 	HardwareLinked bool   `protobuf:"varint,3,opt,name=hardware_linked,json=hardwareLinked,proto3" json:"hardware_linked,omitempty"`
 }
 
-// --- LÓGICA DO CLIENTE (O que estaria no _grpc.pb.go) ---
+func (m *StatusResponse) Reset()         { *m = StatusResponse{} }
+func (m *StatusResponse) String() string { return "status_response" }
+func (*StatusResponse) ProtoMessage()    {}
+
+type BatchRequest struct {
+	Limit int32 `protobuf:"varint,1,opt,name=limit,proto3" json:"limit,omitempty"`
+}
+
+func (m *BatchRequest) Reset()         { *m = BatchRequest{} }
+func (m *BatchRequest) String() string { return "batch_request" }
+func (*BatchRequest) ProtoMessage()    {}
+
+type BatchResponse struct {
+	Metrics []*MetricRequest `protobuf:"bytes,1,rep,name=metrics,proto3" json:"metrics,omitempty"`
+}
+
+func (m *BatchResponse) Reset()         { *m = BatchResponse{} }
+func (m *BatchResponse) String() string { return "batch_response" }
+func (*BatchResponse) ProtoMessage()    {}
+
+// --- LÓGICA DO CLIENTE gRPC ---
 
 type MetricsIngestorClient interface {
 	SendMetricsStream(ctx context.Context, opts ...grpc.CallOption) (MetricsIngestor_SendMetricsStreamClient, error)
