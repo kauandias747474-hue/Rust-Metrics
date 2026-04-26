@@ -1,1 +1,51 @@
+syntax = "proto3";
 
+package telemetry;
+
+// Opção para ajudar o compilador de Go a organizar os pacotes
+option go_package = "./gen/telemetry";
+
+// O Serviço Principal do Sistema
+service MetricsIngestor {
+  // 1. O Músculo: Envio de métricas em tempo real (Stream para performance)
+  rpc SendMetricsStream (stream MetricRequest) returns (MetricResponse);
+
+  // 2. O Gerente: O Go usa isso para checar a saúde do motor Rust
+  rpc GetSystemStatus (Empty) returns (StatusResponse);
+
+  // 3. O Cientista: O Python usa isso para buscar um lote de dados e analisar
+  rpc GetMetricsBatch (BatchRequest) returns (BatchResponse);
+}
+
+// Mensagem de entrada de dados (Rust/C++)
+message MetricRequest {
+  string sensor_id = 1;  // ID do sensor (ex: "CPU_TEMP")
+  float value = 2;       // Valor da métrica (O dado que o C++ processa)
+  int64 timestamp = 3;   // Quando foi gerado (Unix Epoch)
+}
+
+// Resposta do processamento (C++ FFI)
+message MetricResponse {
+  bool success = 1;
+  float calculated_std_dev = 2; // Desvio padrão calculado no C++
+  string message = 3;
+}
+
+// Checagem de saúde (Go Watchdog)
+message StatusResponse {
+  string message = 1;      // Ex: "Motor Operacional"
+  string cpu_usage = 2;    // Uso de CPU do motor Rust
+  bool hardware_linked = 3; // O C++ está carregado na memória?
+}
+
+// Requisição de lote (Python Analysis)
+message BatchRequest {
+  int32 limit = 1;
+}
+
+message BatchResponse {
+  repeated MetricRequest metrics = 1; // Lista de dados para o Polars
+}
+
+// Mensagem vazia para comandos simples
+message Empty {}
