@@ -1,9 +1,4 @@
-Perfeito, Kauan. O segredo de um CONTRIBUTING.md respeitado em projetos de High-Performance Computing (HPC) é a clareza sobre como manter a integridade do sistema. Se o projeto é "pesado" tecnicamente, as regras de contribuição precisam ser "fortes".
 
-Aqui está a expansão completa para o seu arquivo, focada em rigor técnico e profissionalismo:
-
-🤝 CONTRIBUTING.md (Versão Estendida)
-Markdown
 # Contributing to Real-Time Metrics / Contribuindo para o Real-Time Metrics
 
 ## 🇧🇷 Português
